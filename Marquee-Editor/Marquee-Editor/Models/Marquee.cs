@@ -5,8 +5,10 @@ using System.Web;
 
 namespace Marquee_Editor.Models
 {
-    public class MarqueeModels
+    public class Marquee
     {
+        public int Id { get; set; }
+
         public string Location { get; set; }
 
         public string Station { get; set; }

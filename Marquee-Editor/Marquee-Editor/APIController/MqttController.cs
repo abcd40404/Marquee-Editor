@@ -55,7 +55,7 @@ namespace Marquee_Editor.APIController
             System.Diagnostics.Debug.WriteLine(ReceivedMessage);
         }
 
-        public IHttpActionResult PostPublish(Mqtts mqtt)
+        public IHttpActionResult PostPublish(Mqtt mqtt)
         {
             client = new MqttClient("localhost");//MQTTServer在本機
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;//當接收到訊息時處理函式

@@ -21,7 +21,6 @@
         // Code First 模型的詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=390109。
 
         //public virtual DbSet<MyEntity> MyEntities { get; set; }
-        public virtual DbSet<Mqtt> Mqtts { get; set; }
         public virtual DbSet<Marquee> Marquees { get; set; }
         public virtual DbSet<Owner> Owners { get; set; }
         public virtual DbSet<Content> Contents { get; set; }

@@ -7,10 +7,14 @@ namespace Marquee_Editor.Models
 {
     public class Mqtt
     {
-        public int Id { get; set; }
-
         public string Topic { get; set; }
 
         public string Text { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public string PreFunc { get; set; }
+
+        public string PostFunc { get; set; }
     }
 }

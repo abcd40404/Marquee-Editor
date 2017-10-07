@@ -57,7 +57,7 @@ namespace Marquee_Editor.APIController
 
         public IHttpActionResult PostPublish(Mqtt mqtt)
         {
-            client = new MqttClient("localhost");//MQTTServer在本機
+            client = new MqttClient(MosquittoIP);//MQTTServer在本機
             client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;//當接收到訊息時處理函式
             clientId = Guid.NewGuid().ToString();//取得唯一碼
             client.Connect(clientId);//建立連線
@@ -66,9 +66,10 @@ namespace Marquee_Editor.APIController
             {
                 //設定完整的發佈路徑
                 string Topic = mqtt.Topic;
+                string Text = mqtt.Text + "," + mqtt.Date + "," + mqtt.PreFunc + "," + mqtt.PostFunc;
 
                 //發佈主題、內容及設定傳送品質 QoS 0 ( 0, 1, 2 )
-                client.Publish(Topic, Encoding.UTF8.GetBytes(mqtt.Text), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, true);
+                client.Publish(Topic, Encoding.UTF8.GetBytes(Text), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, true);
             }
             else
             {

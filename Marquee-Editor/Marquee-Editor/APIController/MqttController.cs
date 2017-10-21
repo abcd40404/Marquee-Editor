@@ -66,7 +66,7 @@ namespace Marquee_Editor.APIController
             {
                 //設定完整的發佈路徑
                 string Topic = mqtt.Topic;
-                string Text = mqtt.Text + "," + mqtt.Date + "," + mqtt.PreFunc + "," + mqtt.PostFunc;
+                string Text = mqtt.Topic + "," + mqtt.Text + "," + mqtt.Date + "," + mqtt.PreFunc + "," + mqtt.PostFunc;
 
                 //發佈主題、內容及設定傳送品質 QoS 0 ( 0, 1, 2 )
                 client.Publish(Topic, Encoding.UTF8.GetBytes(Text), MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, true);

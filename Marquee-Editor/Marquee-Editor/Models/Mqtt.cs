@@ -9,6 +9,8 @@ namespace Marquee_Editor.Models
     {
         public string Topic { get; set; }
 
+        public string Color { get; set; }
+
         public string Text { get; set; }
 
         public DateTime Date { get; set; }

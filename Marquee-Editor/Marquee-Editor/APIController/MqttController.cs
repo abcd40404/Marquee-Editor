@@ -76,7 +76,7 @@ namespace Marquee_Editor.APIController
 
             }
             System.Diagnostics.Debug.WriteLine(mqtt.Topic);
-            System.Diagnostics.Debug.WriteLine(mqtt.Text);
+            System.Diagnostics.Debug.WriteLine(mqtt.Data);
             return Ok("ok");
         }
     }

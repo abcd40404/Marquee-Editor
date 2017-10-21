@@ -11,7 +11,7 @@ namespace Marquee_Editor.Models
 
         public string Type { get; set; }
 
-        public string Text { get; set; }
+        public string Data { get; set; }
 
         public DateTime Date { get; set; }
     }

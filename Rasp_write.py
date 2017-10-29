@@ -60,6 +60,16 @@ def Data_toHex(Station, Type, Data):
         for i in args:
             res = res + unhexlify(i)
         res = res + unhexlify(checksum)
+    elif(Type == 'B8'): #顯示行號
+        result = Data.split(',')
+        Start = result[0] # 1~255
+        End = result[1] # 1~255
+        args.append("{:02x}".format(int(Start)))
+        args.append("{:02x}".format(int(End)))
+        checksum = get_checksum(args) # 計算 checksum
+        for i in args:
+            res = res + unhexlify(i)
+        res = res + unhexlify(checksum)
     else:
         a=1
 
@@ -70,11 +80,11 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(Topic)
 
 def on_message(client, userdata, msg):
-    result = msg.payload.split("|");
-    Station = result[0];
+    result = msg.payload.split("|")
+    Station = result[0]
     Type = result[1] #已經是 Hex
-    Data = result[2];
-    Date = result[3];
+    Data = result[2]
+    Date = result[3]
     res = '\x02' + Data_toHex(Station, Type, Data) + '\x03'
     print repr(res)
 

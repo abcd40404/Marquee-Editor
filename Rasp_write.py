@@ -39,8 +39,8 @@ def Data_toHex(Station, Type, Data):
     if(Type == 'B1' or Type == 'B2'):
         #行號 停留時間 前功能 文字模式碼 屬性 文字 後功能
         result = Data.split(',')
-        Lines = result[0] # 1~255
-        StayTime = result[1] # 0~255
+        Lines = result[0] # int 1~255
+        StayTime = result[1] # int 0~255
         PreFunc = result[2] # single char
         Text_type = result[3] # 已經是 Hex(C0, C1)
         Attribute = result[4] # 已經是 Hex
@@ -60,10 +60,23 @@ def Data_toHex(Station, Type, Data):
         for i in args:
             res = res + unhexlify(i)
         res = res + unhexlify(checksum)
+    elif(Type == 'B6' or Type == 'B7'):
+        result = Data.split(',')
+        Num = int(result[0]) # int
+        args.append("{:02x}".format(Num))
+        for i in range(1, Num+1):
+            args.append("{:02x}".format(int(result[i])))
+
+        checksum = get_checksum(args)
+        # 轉為16進位數據
+        for i in args:
+            res = res + unhexlify(i)
+        res = res + unhexlify(checksum)
+
     elif(Type == 'B8'): #顯示行號
         result = Data.split(',')
-        Start = result[0] # 1~255
-        End = result[1] # 1~255
+        Start = result[0] # int 1~255
+        End = result[1] # int 1~255
         args.append("{:02x}".format(int(Start)))
         args.append("{:02x}".format(int(End)))
         checksum = get_checksum(args) # 計算 checksum

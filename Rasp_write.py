@@ -36,6 +36,7 @@ def Data_toHex(Station, Type, Data):
         args.append(hexlify(c))
     args.append(Type)
     res = ''
+    print repr(unhexlify(hexlify("嗨")))
     if(Type == 'B1' or Type == 'B2'):
         #行號 停留時間 前功能 文字模式碼 屬性 文字 後功能
         result = Data.split(',')
@@ -43,6 +44,11 @@ def Data_toHex(Station, Type, Data):
         StayTime = result[1] # int 0~255
         PreFunc = result[2] # single char
         Text_type = result[3] # 已經是 Hex(C0, C1)
+        # 英文半形, 中文全形
+        if(Text_type == 'C0'): # 半形 or 全形
+            a=1
+        elif(Text_type == 'C1'): # 上下兩行的半形
+            t=1
         Attribute = result[4] # 已經是 Hex
         Text = result[5]
         PostFunc = result[6] # single char

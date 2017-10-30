@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: cp950 -*-¡@
+#-*- coding:utf-8 -*-ã€€
 
 from binascii import unhexlify
 from binascii import hexlify
@@ -8,7 +8,7 @@ import serial
 import paho.mqtt.client as mqtt
 
 Topic = "A1"
-MosquittoIP = "localhost"
+MosquittoIP = "192.168.15.110"
 
 # ser = serial.Serial(
 #
@@ -20,8 +20,8 @@ MosquittoIP = "localhost"
 #     timeout=1
 # )
 
-# str.encode/hexlify ±N¦r¦êÂà¬°«ü©w½s½X¦r¦ê
-# unhexlify ±N16¶i¦ì¦r¦êÂà¬°16¶i¦ì¼Æ¾Ú
+# str.encode/hexlify å°‡å­—ä¸²è½‰ç‚ºæŒ‡å®šç·¨ç¢¼å­—ä¸²
+# unhexlify å°‡16é€²ä½å­—ä¸²è½‰ç‚º16é€²ä½æ•¸æ“š
 
 def get_checksum(args):
     res = 0
@@ -31,38 +31,49 @@ def get_checksum(args):
     return "{:02x}".format(res)
 
 def Data_toHex(Station, Type, Data):
-    args = [] # ¦s©ñ16¶i¦ì¦r¦ê°Ñ¼Æ
+    args = [] # å­˜æ”¾16é€²ä½å­—ä¸²åƒæ•¸
     for c in Station:
         args.append(hexlify(c))
     args.append(Type)
     res = ''
-    print repr(unhexlify(hexlify("¶Ù")))
+    # print hexlify("å—¨")
     if(Type == 'B1' or Type == 'B2'):
-        #¦æ¸¹ °±¯d®É¶¡ «e¥\¯à ¤å¦r¼Ò¦¡½X Äİ©Ê ¤å¦r «á¥\¯à
+        #è¡Œè™Ÿ åœç•™æ™‚é–“ å‰åŠŸèƒ½ æ–‡å­—æ¨¡å¼ç¢¼ å±¬æ€§ æ–‡å­— å¾ŒåŠŸèƒ½
         result = Data.split(',')
-        Lines = result[0] # int 1~255
+        if(Type == 'B1'):
+            Lines = result[0] # int 1~254
+            args.append("{:02x}".format(int(Lines)))
+        elif(Type == 'B2'):
+            Times = reslut[0] # int 1 ~ 255
+            args.append("{:02x}".format(int(Times)))
         StayTime = result[1] # int 0~255
         PreFunc = result[2] # single char
-        Text_type = result[3] # ¤w¸g¬O Hex(C0, C1)
-        # ­^¤å¥b§Î, ¤¤¤å¥ş§Î
-        if(Text_type == 'C0'): # ¥b§Î or ¥ş§Î
-            a=1
-        elif(Text_type == 'C1'): # ¤W¤U¨â¦æªº¥b§Î
-            t=1
-        Attribute = result[4] # ¤w¸g¬O Hex
+        Text_type = result[3] # å·²ç¶“æ˜¯ Hex(C0, C1)
+        Attribute = result[4] # å·²ç¶“æ˜¯ Hex
         Text = result[5]
         PostFunc = result[6] # single char
-        args.append("{:02x}".format(int(Lines)))
         args.append("{:02x}".format(int(StayTime)))
         args.append(hexlify(PreFunc))
         args.append(Text_type)
-        for i in range(0, 10):
-            args.append(Attribute)
-            args.append(hexlify(Text[i]))
-        args.append(hexlify(PostFunc))
+        # è‹±æ–‡åŠå½¢, ä¸­æ–‡å…¨å½¢
+        Text = Text.decode('utf-8') # utf-8 è½‰ç‚º unicodeå­—ä¸²
 
-        checksum = get_checksum(args) # ­pºâ checksum
-        # Âà¬°16¶i¦ì¼Æ¾Ú
+        if(Text_type == 'C0'): # åŠå½¢ or å…¨å½¢
+            for i in range(0, 10):
+                if(u'\u4e00' <= Text[i] <= u'\u9fff'): # ä¸­æ–‡ utf8 ç¯„åœ
+                    args.append(Attribute)
+                    args.append(Attribute)
+                    args.append(hexlify(Text[i].encode('big5')))
+                else:
+                    args.append(Attribute)
+                    args.append(hexlify(Text[i]))
+        elif(Text_type == 'C1'): # ä¸Šä¸‹å…©è¡Œçš„åŠå½¢
+            for i in range(0, 20):
+                args.append(Attribute)
+                args.append(hexlify(Text[i]))
+        args.append(hexlify(PostFunc))
+        checksum = get_checksum(args) # è¨ˆç®— checksum
+        # è½‰ç‚º16é€²ä½æ•¸æ“š
         for i in args:
             res = res + unhexlify(i)
         res = res + unhexlify(checksum)
@@ -74,18 +85,18 @@ def Data_toHex(Station, Type, Data):
             args.append("{:02x}".format(int(result[i])))
 
         checksum = get_checksum(args)
-        # Âà¬°16¶i¦ì¼Æ¾Ú
+        # è½‰ç‚º16é€²ä½æ•¸æ“š
         for i in args:
             res = res + unhexlify(i)
         res = res + unhexlify(checksum)
 
-    elif(Type == 'B8'): #Åã¥Ü¦æ¸¹
+    elif(Type == 'B8'): #é¡¯ç¤ºè¡Œè™Ÿ
         result = Data.split(',')
         Start = result[0] # int 1~255
         End = result[1] # int 1~255
         args.append("{:02x}".format(int(Start)))
         args.append("{:02x}".format(int(End)))
-        checksum = get_checksum(args) # ­pºâ checksum
+        checksum = get_checksum(args) # è¨ˆç®— checksum
         for i in args:
             res = res + unhexlify(i)
         res = res + unhexlify(checksum)
@@ -101,7 +112,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     result = msg.payload.split("|")
     Station = result[0]
-    Type = result[1] #¤w¸g¬O Hex
+    Type = result[1] #å·²ç¶“æ˜¯ Hex
     Data = result[2]
     Date = result[3]
     res = '\x02' + Data_toHex(Station, Type, Data) + '\x03'

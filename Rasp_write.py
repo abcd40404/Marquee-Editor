@@ -10,15 +10,15 @@ import paho.mqtt.client as mqtt
 Topic = "A1"
 MosquittoIP = "192.168.15.110"
 
-# ser = serial.Serial(
-#
-#     port='/dev/ttyAMA0',
-#     baudrate=9600,
-#     parity=serial.PARITY_NONE,
-#     stopbits=serial.STOPBITS_ONE,
-#     bytesize=serial.EIGHTBITS,
-#     timeout=1
-# )
+ser = serial.Serial(
+
+    port='/dev/ttyAMA0',
+    baudrate=9600,
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.EIGHTBITS,
+    timeout=1
+)
 
 # str.encode/hexlify 將字串轉為指定編碼字串
 # unhexlify 將16進位字串轉為16進位數據
@@ -122,7 +122,7 @@ def on_message(client, userdata, msg):
     #my_string = "\x02\x41\x31\xB8\x01\x12\xDB\x03"
     my_string = "\x02\x41\x31\xB1\x03\x05\x41\xC0\x01\x48\x01\x45\x01\x4C\x01\x4C\x01\x4F\x01\x57\x01\x4F\x01\x52\x01\x4C\x01\x44\x41\x07\x03"
     print repr(my_string)
-    # ser.write(my_string)
+    # ser.write(res)
 
 client = mqtt.Client()
 client.on_connect = on_connect
@@ -130,25 +130,4 @@ client.on_message = on_message
 client.connect(MosquittoIP, 1883, 60)
 client.loop_forever()
 
-counter = 0
 
-#my_string = "\x02\x41\x31\xB8\x01\x12\xDB\x03"
-#my_string = "\x02\x41\x31\xB1\x03\x05\x41\xC0\x01\x48\x01\x45\x01\x4C\x01\x4C\x01\x4F\x01\x57\x01\x4F\x01\x52\x01\x4C\x01\x44\x41\x07\x03"
-#ser.write(my_string)
-
-'''
-
-#my_string = "\x02\x41\x31\xB1\x02\x05\x41\xC0\x01\x41\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x41\x67\x03"
-#my_string = "\x02\x41\x31\xB1\x04\x05\x41\xC0\x01\x42\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x41\x62\x03"
-#my_string = "\x02\x41\x31\xB8\x80\xFF\xB7\x03"
-#my_string = "024131B1020541C00141012001200120012001200120012001200120416703"
-#my_string = "024131B1030541C001480145014C014C014F0157014F0152014C0144410703"
-#my_string = "\x02\x41\x31\xB1\x06\x05\x41\xC0\x04\x31\x01\x20\x01\x20\x01\x20\x04\x31\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x41\x02\x03"
-#my_string = "\r"
-my_string = "\x02\x41\x31\xB1\x07\x05\x41\xC0\x01\x59\x01\x4F\x01\x4F\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x01\x20\x41\x7A\x03"
-"""print('Write counter:'+ front + ' ' + mac1 + ' ' + mac2 + ' ' + type + ' ' +cols + ' ' + cole + ' ' + check + ' ' + end + '\n') """
-""" print('Write counter:'+ front + " %d %d " %(mac1,mac2) + type + " %d %d " %(cols,cole) + check + end ) """
-
-
-""" print(front + ' ' + mac1 + ' ' + mac2 + ' ' + type + ' ' +cols + ' ' + cole + ' ' + check + ' ' + end + '\n')"""
-'''

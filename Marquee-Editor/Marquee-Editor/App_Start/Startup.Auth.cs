@@ -7,10 +7,17 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using Marquee_Editor.Models;
 
+using Marquee_Editor.Providers;
+using Microsoft.Owin.Security.OAuth;
+
 namespace Marquee_Editor
 {
     public partial class Startup
     {
+
+        public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
+
+        public static string PublicClientId { get; private set; }
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -32,10 +39,25 @@ namespace Marquee_Editor
                     // 這是您變更密碼或將外部登入新增至帳戶時所使用的安全性功能。  
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
                         validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager, DefaultAuthenticationTypes.ApplicationCookie))
                 }
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+            // 設定 OAuth 基礎流程的應用程式
+            PublicClientId = "self";
+            OAuthOptions = new OAuthAuthorizationServerOptions
+            {
+                TokenEndpointPath = new PathString("/Token"),
+                Provider = new ApplicationOAuthProvider(PublicClientId),
+                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                // 在生產模式中設定 AllowInsecureHttp = false
+                AllowInsecureHttp = true
+            };
+
+            // 讓應用程式使用 Bearer 權杖驗證使用者
+            app.UseOAuthBearerTokens(OAuthOptions);
 
             // 讓應用程式在雙因素驗證程序中驗證第二個因素時暫時儲存使用者資訊。
             app.UseTwoFactorSignInCookie(DefaultAuthenticationTypes.TwoFactorCookie, TimeSpan.FromMinutes(5));

@@ -47,14 +47,23 @@ namespace Marquee_Editor.APIController
             stream.Write(byteWordPost, 0, byteWordPost.Length);
 
             //取得網頁結果
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream receiveStream = response.GetResponseStream();
-            StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            string JSON = readStream.ReadToEnd();
-            JObject obj = JsonConvert.DeserializeObject<JObject>(JSON);
-            string returnString = obj["access_token"].ToString();
-            response.Close();
-
+            string returnString;
+            HttpWebResponse response;
+            //如果登入失敗會回傳例外: Bad Request
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                Stream receiveStream = response.GetResponseStream();
+                StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
+                string JSON = readStream.ReadToEnd();
+                JObject obj = JsonConvert.DeserializeObject<JObject>(JSON);
+                returnString = obj["access_token"].ToString();
+                response.Close();
+            }
+            catch
+            {
+                returnString = "帳號或密碼錯誤";
+            }
             return Ok(returnString);
         }
         [AllowAnonymous]

@@ -75,7 +75,7 @@ namespace Marquee_Editor.APIController
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            return Ok("ok");
         }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)

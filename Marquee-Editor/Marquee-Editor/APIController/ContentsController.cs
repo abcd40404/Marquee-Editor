@@ -12,6 +12,7 @@ using Marquee_Editor.Models;
 
 namespace Marquee_Editor.APIController
 {
+    [Authorize]
     public class ContentsController : ApiController
     {
         private MyDB db = new MyDB();

@@ -10,6 +10,7 @@ using Marquee_Editor.Models;
 
 namespace Marquee_Editor.Controllers
 {
+    [Authorize]
     public class ContentsController : Controller
     {
         private MyDB db = new MyDB();

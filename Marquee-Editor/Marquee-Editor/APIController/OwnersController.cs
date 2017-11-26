@@ -13,44 +13,44 @@ using Marquee_Editor.Models;
 namespace Marquee_Editor.APIController
 {
     [Authorize]
-    public class MarqueesController : ApiController
+    public class OwnersController : ApiController
     {
         private MyDB db = new MyDB();
 
-        // GET: api/Marquees
-        public IQueryable<Marquee> GetMarquees()
+        // GET: api/Owners
+        public IQueryable<Owner> GetOwners()
         {
-            return db.Marquees;
+            return db.Owners;
         }
 
-        // GET: api/Marquees/5
-        [ResponseType(typeof(Marquee))]
-        public IHttpActionResult GetMarquee(int id)
+        // GET: api/Owners/5
+        [ResponseType(typeof(Owner))]
+        public IHttpActionResult GetOwner(int id)
         {
-            Marquee marquee = db.Marquees.Find(id);
-            if (marquee == null)
+            Owner owner = db.Owners.Find(id);
+            if (owner == null)
             {
                 return NotFound();
             }
 
-            return Ok(marquee);
+            return Ok(owner);
         }
 
-        // PUT: api/Marquees/5
+        // PUT: api/Owners/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutMarquee(int id, Marquee marquee)
+        public IHttpActionResult PutOwner(int id, Owner owner)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != marquee.Id)
+            if (id != owner.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(marquee).State = EntityState.Modified;
+            db.Entry(owner).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +58,7 @@ namespace Marquee_Editor.APIController
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MarqueeExists(id))
+                if (!OwnerExists(id))
                 {
                     return NotFound();
                 }
@@ -71,35 +71,35 @@ namespace Marquee_Editor.APIController
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Marquees
-        [ResponseType(typeof(Marquee))]
-        public IHttpActionResult PostMarquee(Marquee marquee)
+        // POST: api/Owners
+        [ResponseType(typeof(Owner))]
+        public IHttpActionResult PostOwner(Owner owner)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Marquees.Add(marquee);
+            db.Owners.Add(owner);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = marquee.Id }, marquee);
+            return CreatedAtRoute("DefaultApi", new { id = owner.Id }, owner);
         }
 
-        // DELETE: api/Marquees/5
-        [ResponseType(typeof(Marquee))]
-        public IHttpActionResult DeleteMarquee(int id)
+        // DELETE: api/Owners/5
+        [ResponseType(typeof(Owner))]
+        public IHttpActionResult DeleteOwner(int id)
         {
-            Marquee marquee = db.Marquees.Find(id);
-            if (marquee == null)
+            Owner owner = db.Owners.Find(id);
+            if (owner == null)
             {
                 return NotFound();
             }
 
-            db.Marquees.Remove(marquee);
+            db.Owners.Remove(owner);
             db.SaveChanges();
 
-            return Ok(marquee);
+            return Ok(owner);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +111,9 @@ namespace Marquee_Editor.APIController
             base.Dispose(disposing);
         }
 
-        private bool MarqueeExists(int id)
+        private bool OwnerExists(int id)
         {
-            return db.Marquees.Count(e => e.Id == id) > 0;
+            return db.Owners.Count(e => e.Id == id) > 0;
         }
     }
 }

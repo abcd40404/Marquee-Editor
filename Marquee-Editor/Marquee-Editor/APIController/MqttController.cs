@@ -12,6 +12,7 @@ using Marquee_Editor.Models;
 
 namespace Marquee_Editor.APIController
 {
+    [Authorize]
     public class MqttController : ApiController
     {
         delegate void SetTextCallback(string text);//用來更新UIText 的Callback
@@ -54,7 +55,6 @@ namespace Marquee_Editor.APIController
             System.Diagnostics.Debug.WriteLine("Message Received");
             System.Diagnostics.Debug.WriteLine(ReceivedMessage);
         }
-
         public IHttpActionResult PostPublish(Mqtt mqtt)
         {
             client = new MqttClient(MosquittoIP);//MQTTServer在本機

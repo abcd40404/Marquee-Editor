@@ -205,6 +205,7 @@
     <Compile Include="APIController\ContentsController.cs" />
     <Compile Include="APIController\MarqueesController.cs" />
     <Compile Include="APIController\MqttController.cs" />
+    <Compile Include="APIController\OwnersController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
